@@ -6,6 +6,7 @@ const TodoList = () => {
 	const [headingInput, setHeadingInput] = useState('');
 	const [listInputs, setListInputs] = useState({});
 
+	//add to-do
 	const handleAddTodo = () => {
 		if (headingInput.trim() !== '') {
 			setTodos([...todos, { heading: headingInput, lists: [] }]);
@@ -13,11 +14,14 @@ const TodoList = () => {
 		}
 	};
 
+	// add to-do-list
 	// Function to handle adding a new list item to a specific todo heading
 	const handleAddList = (index) => {
+		// console.log("handleAddList", listInputs, index);
 		if (listInputs[index] && listInputs[index].trim() !== '') {
 			// Create a copy of the current todos array
 			const newTodos = [...todos];
+			// console.log("handleAddList1", index, newTodos[index], listInputs[index])
 			// Add the new list item to the corresponding heading's list
 			newTodos[index].lists.push(listInputs[index]);
 			setTodos(newTodos);
@@ -28,9 +32,20 @@ const TodoList = () => {
 
 	// Function to update list input value for a specific heading index
 	const handleListInputChange = (index, value) => {
+		// console.log("handleListInputChange", index, value);
 		setListInputs({ ...listInputs, [index]: value }); // Update the listInputs state for the corresponding index
 	};
-	
+
+	//delete to-do
+	const haandleDeleteTodo = (index) => {
+		// Create a shallow copy of the current todos array
+		const newTodos = [...todos];
+		// Remove the todo at the specified index
+		newTodos.splice(index, 1);
+		// Update the state with the new array (without the deleted todo)
+		setTodos(newTodos);
+	};
+
 	return (
 		<>
 			<div className="todo-container">
@@ -56,8 +71,20 @@ const TodoList = () => {
 							<h3>{todo.heading}</h3>
 
 							{/* Button to delete the current heading by passing its index */}
-							<button className="delete-button-heading" onClick={() => haandleDeleteTodo(index)}>Delete Heading</button>
+							<button className="delete-button-heading" onClick={() => haandleDeleteTodo(index)}>
+								Delete Heading
+							</button>
 						</div>
+
+						<ul>
+							{/* Iterate over each list item inside the current todo */}
+							{todo.lists.map((list, listIndex) => (
+								<li key={listIndex} className='todo_inside_list'>
+									{/* Display the text content of the list item */}
+									<p>{list}</p>
+								</li>
+							))}
+						</ul>
 
 						<div className='add_list'>
 							{/* Input field for adding a new item under a specific heading */}
